@@ -11,7 +11,7 @@ case class Tenant(id: String)
 
 case class Device(id: String, secret: String, tenant_id: String)
 
-case class Event(id: String, device_id: String, eventDateTime: String)
+case class Event(id: String, device_id: String)
 
 class Tenants(val db: DbContext) {
 
