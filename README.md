@@ -1,17 +1,39 @@
-# Play Framework with Quill JDBC
+Playframework Multi-tenant PoC
 
+Business Layer
 
-Starter project using Play Framework 2.5 with [Quill](http://getquill.io/)
+All API calls to be invoked by the clients for publishing events will be protected and will uniquely identify the tenant using a JWT Token passed in the request header (tenant-key).
 
-This project is setup with:
-* [Play Evolutions](https://www.playframework.com/documentation/2.5.x/Evolutions)
-* [Compile Time Dependency Injection](https://www.playframework.com/documentation/2.5.x/ScalaCompileTimeDependencyInjection)
-* [String Interpolating Routing DSL](https://www.playframework.com/documentation/2.5.x/ScalaSirdRouter)
-* [Quill-jdbc](http://getquill.io/#quill-jdbc)
+Action Composition - Playframework
 
-## How to use this template
-**Option 1**: If you have [activator](https://www.lightbend.com/community/core-tools/activator-and-sbt) installed
+A generic action will be be implemented to identify Tenats using the tenant-key header. Using Playframework's feature for Action Composition this functionality can be implemented in a generic way.
 
-    activator new PROJECTNAME play-quill-jdbc
+Tenant Key - JWT Token
 
-**Option 2:** Just clone this repository and use it with [sbt](http://www.scala-sbt.org)
+JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims securely between two parties.
+
+Sample JWT Token
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5hbnRfaWQiOiIxMjM0NTY3ODkwIiwic3RhdGlvbkNvZGUiOiJMRE4iLCJ3aW5kb3ciOiI4MSJ9.78aWeDjwDE0y8PqyLWSbAOt-hbtPPyVvpY92cM780YA
+
+JWT Token Content
+
+HEADER:ALGORITHM & TOKEN TYPE
+
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+PAYLOAD:DATA
+
+{
+  "tenant_id": "1234567890",
+  "stationCode": "LDN",
+  "window": "81"
+}
+VERIFY SIGNATURE
+HMACSHA256(
+  base64UrlEncode(header) + "." +
+  base64UrlEncode(payload),  
+  secret
+) secret base64 encoded
